@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
+
 import api from "../../service/api";
 
 import Titulo from "../../components/Titulo";
@@ -14,12 +16,13 @@ function Home() {
       .then((response) => {
         if (response.status === 200) {
           setUserData([...userData, response.data]);
+          setNomeUsuario("");
         }
       })
       .catch((error) => {
         alert(error.message);
       });
-  }  
+  }
 
   return (
     <>
@@ -32,9 +35,16 @@ function Home() {
       <button onClick={handleSubmit}>Pesquisar</button>
       {userData.length === 0
         ? ""
-        : userData.slice(0).reverse().map((user, index) => {
-            return <Card key={index} user={user} />;
-          })}
+        : userData
+            .slice(0)
+            .reverse()
+            .map((user, index) => {
+              return (
+                <Link key={index} to={`/repositorios/${user.login}`}>
+                  <Card user={user} />
+                </Link>
+              );
+            })}
     </>
   );
 }
